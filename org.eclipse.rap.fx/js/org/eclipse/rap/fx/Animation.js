@@ -10,12 +10,16 @@
  ******************************************************************************/
  
 qx.Class.createNamespace( "org.eclipse.rap.fx", {} );
- 
+
+(function(){
+
+var AnimationUntil = org.eclipse.rwt.AnimationUntil;
+
 org.eclipse.rap.fx.Animation = {
 
   shake : function( widget ) {
-    var animation = org.eclipse.rwt.AnimationUntil._createAnimation( widget, 500, "linear" );
-    var rendererX = org.eclipse.rwt.AnimationUntil._createRenderer( animation, widget, "left" );
+    var animation = AnimationUntil._createAnimation( widget, 500, "linear" );
+    var rendererX = AnimationUntil._createRenderer( animation, widget, "left" );
     var left = parseInt( widget.getLeft(), 10 );
     var rad = 10;
     var converter = function( pos ){
@@ -24,15 +28,7 @@ org.eclipse.rap.fx.Animation = {
     };
     rendererX.setConverter( converter );
     animation.start();
-  },
-
-  _getWidget : function( arg ) {
-    var result = arg;
-    if( result instanceof org.eclipse.rap.clientscripting.WidgetProxy ) {
-      var id = result.getData( org.eclipse.rap.clientscripting.WidgetProxy._ID );
-      result = org.eclipse.rwt.protocol.ObjectManager.getObject( id );
-    }
-    return result;
   }
-
 };
+
+}());
