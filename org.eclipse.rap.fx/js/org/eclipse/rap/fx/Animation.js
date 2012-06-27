@@ -26,6 +26,11 @@ org.eclipse.rap.fx.Animation = {
       var result = left + Math.round( Math.sin( 8 * Math.PI * pos ) * rad );
       return result;
     };
+    var cancel = function() { animation.cancel(); };
+    widget.addEventListener( "changeLeft", cancel );
+    animation.addEventListener( "cancel", function() {
+      widget.removeEventListener( "changeLeft", cancel );
+    } );
     rendererX.setConverter( converter );
     animation.start();
   },
@@ -45,6 +50,11 @@ org.eclipse.rap.fx.Animation = {
     var renderer = AnimationUntil._createRenderer( animation, widget, "backgroundColor" );
     renderer.setStartValue( startColor );
     renderer.setEndValue( endColor );
+    var cancel = function() { animation.cancel(); };
+    widget.addEventListener( "changeBackgroundColor", cancel );
+    animation.addEventListener( "cancel", function() {
+      widget.removeEventListener( "changeBackgroundColor", cancel );
+    } );
     animation.start();
   }
 

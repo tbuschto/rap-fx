@@ -40,6 +40,19 @@ qx.Class.define( "org.eclipse.rap.fx.Animation_Test", {
       assertTrue( parseInt( widget._style.left ) == 40 );
     },
 
+    testAnimationShakeInterrupted : function() {
+      widget.setLeft( 40 );
+      Animation.shake( widget );
+      TestUtil.flush();
+      var animation = this._getAnimation();
+      this._loop( animation, 0 );
+      this._loop( animation, 0.4 );
+      widget.setLeft( 50 );
+      TestUtil.flush();
+      assertFalse( animation.isRunning() );
+      assertTrue( parseInt( widget._style.left ) == 50 );
+    },
+
     testAnimationColorToColorFade : function() {
       widget.setBackgroundColor( "#FF0000" );
       widget.setBackgroundGradient( null );
@@ -55,6 +68,21 @@ qx.Class.define( "org.eclipse.rap.fx.Animation_Test", {
       this._loop( animation, 1.1 );
       assertEquals( [ 255, 0, 0 ], this._getBackground( widget ) );
       assertFalse( animation.isRunning() );
+    },
+
+    testAnimationColorToColorFadeInterrupted : function() {
+      widget.setBackgroundColor( "#FF0000" );
+      widget.setBackgroundGradient( null );
+      Animation.colorFade( widget, [ 100, 50, 255 ] );
+      TestUtil.flush();
+      var animation = this._getAnimation();
+
+      this._loop( animation, 0 );
+      this._loop( animation, 0.4 );
+      widget.setBackgroundColor( "#00FF00" );
+
+      assertFalse( animation.isRunning() );
+      assertEquals( [ 0, 255, 0 ], this._getBackground( widget ) );
     },
 
     setUp : function() {
