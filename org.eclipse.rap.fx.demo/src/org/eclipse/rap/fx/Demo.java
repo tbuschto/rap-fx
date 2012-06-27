@@ -18,6 +18,7 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -46,9 +47,12 @@ public class Demo implements IEntryPoint {
   }
 
   private void createShellContents( final Composite parent ) {
-    parent.setLayout( new GridLayout( 1, false ) );
+    parent.setLayout( new GridLayout( 2, false ) );
     Button shake = new Button( parent, SWT.PUSH );
     shake.setText( "Shake!" );
+    GridData fullRow = new GridData();
+    fullRow.horizontalSpan = 2;
+    shake.setLayoutData( fullRow );
     shake.addSelectionListener( new SelectionAdapter() {
       public void widgetSelected( SelectionEvent e ) {
         Animation.shake( parent.getShell() );
@@ -62,6 +66,16 @@ public class Demo implements IEntryPoint {
       public void mouseUp( MouseEvent e ) { }
       public void mouseDown( MouseEvent e ) {
        Animation.colorFade( redFade, new RGB( 255, 90, 90 ) );
+      }
+      public void mouseDoubleClick( MouseEvent e ) { }
+    } );
+    final Label greenFade = new Label( parent, SWT.BORDER );
+    greenFade.setText( "Green Fade" );
+    greenFade.setCursor( greenFade.getDisplay().getSystemCursor( SWT.CURSOR_HAND ) );
+    greenFade.addMouseListener( new MouseListener() {
+      public void mouseUp( MouseEvent e ) { }
+      public void mouseDown( MouseEvent e ) {
+        Animation.colorFade( greenFade, new RGB( 90, 255, 90 ) );
       }
       public void mouseDoubleClick( MouseEvent e ) { }
     } );

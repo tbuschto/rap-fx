@@ -36,10 +36,8 @@ org.eclipse.rap.fx.Animation = {
   },
 
   colorFade : function( widget, color ) {
-    try {
-      var widgetColor = qx.util.ColorUtil.cssStringToRgb( widget.getBackgroundColor() );
-    } catch( ex ) {
-    }
+    var colorStr = widget.getBackgroundColor()
+    var widgetColor = this._getBackground( widget );
     if( color && widgetColor ) {
       this._colorToColorFade( widget, color, widgetColor );
     }
@@ -54,8 +52,25 @@ org.eclipse.rap.fx.Animation = {
     widget.addEventListener( "changeBackgroundColor", cancel );
     animation.addEventListener( "cancel", function() {
       widget.removeEventListener( "changeBackgroundColor", cancel );
+      widget._applyBackgroundColor( widget.getBackgroundColor() );
     } );
     animation.start();
+  },
+
+  _getBackground : function( widget ) {
+    var result = null;
+    var target = widget;
+    while( target && !result ) {
+      if( !this._isTransparent( target ) ) {
+        result = qx.util.ColorUtil.cssStringToRgb( target.getBackgroundColor() );
+      }
+      target = target.getParent();
+    }
+    return result;
+  },
+
+  _isTransparent : function( widget ) {
+    return ( ( widget.getBackgroundColor() == null ) || ( widget.getBackgroundColor() === "transparent" ) );
   }
 
 };

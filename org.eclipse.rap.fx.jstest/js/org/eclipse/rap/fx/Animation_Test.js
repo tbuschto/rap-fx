@@ -85,6 +85,23 @@ qx.Class.define( "org.eclipse.rap.fx.Animation_Test", {
       assertEquals( [ 0, 255, 0 ], this._getBackground( widget ) );
     },
 
+    testAnimationColorToTransparentFade : function() {
+      widget.setBackgroundColor( null );
+      widget.setBackgroundGradient( null );
+      qx.ui.core.ClientDocument.getInstance().setBackgroundColor( "#FF0000" );
+      widget.getParent().setBackgroundColor( null );
+      Animation.colorFade( widget, [ 100, 50, 255 ] );
+      TestUtil.flush();
+      assertEquals( null, this._getBackground( widget ) );
+      var animation = this._getAnimation();
+      this._loop( animation, 0 );
+      this._loop( animation, 0.99 );
+      assertEquals( [ 252, 1, 5 ], this._getBackground( widget ) );
+      this._loop( animation, 1.1 );
+      assertEquals( null, this._getBackground( widget ) );
+      qx.ui.core.ClientDocument.getInstance().setBackgroundColor( null );
+    },
+
     setUp : function() {
       TestUtil.createShellByProtocol( "w2" );
       Processor.processOperation( {
@@ -129,8 +146,12 @@ qx.Class.define( "org.eclipse.rap.fx.Animation_Test", {
     },
 
     _getBackground : function( widget ) {
+      var result = null
       var cssStr = TestUtil.getCssBackgroundColor( widget );
-      return qx.util.ColorUtil.stringToRgb( cssStr );
+      if( cssStr && cssStr != "transparent" ) {
+        result = qx.util.ColorUtil.stringToRgb( cssStr );
+      }
+      return result;
     }
 
   }
