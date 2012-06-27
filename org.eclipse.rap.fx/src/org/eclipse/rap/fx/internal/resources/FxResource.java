@@ -14,7 +14,7 @@ import org.eclipse.rwt.resources.IResource;
 import org.eclipse.rwt.resources.IResourceManager.RegisterOptions;
 
 
-public abstract class ClientScriptingResource implements IResource {
+public abstract class FxResource implements IResource {
 
   private static final String PATH_PREFIX = "/org/eclipse/rap/fx/";
 
@@ -24,12 +24,12 @@ public abstract class ClientScriptingResource implements IResource {
 
   private final String location;
 
-  public ClientScriptingResource( String location ) {
+  public FxResource( String location ) {
     this.location = PATH_PREFIX + location;
   }
 
   public ClassLoader getLoader() {
-    return ClientScriptingResource.class.getClassLoader();
+    return FxResource.class.getClassLoader();
   }
 
   public String getLocation() {

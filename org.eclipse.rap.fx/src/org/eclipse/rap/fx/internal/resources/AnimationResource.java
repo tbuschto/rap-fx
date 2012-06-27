@@ -11,7 +11,7 @@
 package org.eclipse.rap.fx.internal.resources;
 
 
-public class AnimationResource extends ClientScriptingResource {
+public class AnimationResource extends FxResource {
 
   public AnimationResource() {
     super( "Animation.js" );
