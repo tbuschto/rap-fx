@@ -12,6 +12,7 @@ package org.eclipse.rap.fx;
 
 import org.eclipse.rwt.internal.widgets.JSExecutor;
 import org.eclipse.rwt.lifecycle.WidgetUtil;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
 
@@ -20,6 +21,10 @@ public class Animation  {
 
   public static void shake( Control control ) {
     call( "org.eclipse.rap.fx.Animation.shake", new Object[]{ control } );
+  }
+  
+  public static void colorFade( Control control, RGB color ) {
+    call( "org.eclipse.rap.fx.Animation.colorFade", new Object[]{ control, color } );
   }
 
   private static void call( String function, Object[] args ) {
@@ -30,6 +35,9 @@ public class Animation  {
         code += "org.eclipse.rwt.protocol.ObjectManager.getObject( \"";
         code += WidgetUtil.getId( ( Widget )args[ i ] );
         code += "\" )";
+      } else if( args[ i ] instanceof RGB ) {
+        RGB rgb = ( RGB )args[ i ];
+        code += "[ " + rgb.red + ", " + rgb.green + ", " + rgb.blue + " ]";
       }
       if( i != args.length - 1 ) {
         code += ", ";

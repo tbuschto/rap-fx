@@ -13,12 +13,16 @@ package org.eclipse.rap.fx;
 
 import org.eclipse.rwt.lifecycle.IEntryPoint;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 
@@ -49,6 +53,17 @@ public class Demo implements IEntryPoint {
       public void widgetSelected( SelectionEvent e ) {
         Animation.shake( parent.getShell() );
       }
+    } );
+    final Label redFade = new Label( parent, SWT.BORDER );
+    redFade.setText( "Red Fade" );
+    redFade.setCursor( redFade.getDisplay().getSystemCursor( SWT.CURSOR_HAND ) );
+    redFade.setBackground( redFade.getDisplay().getSystemColor( SWT.COLOR_GREEN ) );
+    redFade.addMouseListener( new MouseListener() {
+      public void mouseUp( MouseEvent e ) { }
+      public void mouseDown( MouseEvent e ) {
+       Animation.colorFade( redFade, new RGB( 255, 90, 90 ) );
+      }
+      public void mouseDoubleClick( MouseEvent e ) { }
     } );
   }
 

@@ -28,7 +28,26 @@ org.eclipse.rap.fx.Animation = {
     };
     rendererX.setConverter( converter );
     animation.start();
+  },
+
+  colorFade : function( widget, color ) {
+    try {
+      var widgetColor = qx.util.ColorUtil.cssStringToRgb( widget.getBackgroundColor() );
+    } catch( ex ) {
+    }
+    if( color && widgetColor ) {
+      this._colorToColorFade( widget, color, widgetColor );
+    }
+  },
+
+  _colorToColorFade : function( widget, startColor, endColor ) {
+    var animation = AnimationUntil._createAnimation( widget, 800, "easeIn" );
+    var renderer = AnimationUntil._createRenderer( animation, widget, "backgroundColor" );
+    renderer.setStartValue( startColor );
+    renderer.setEndValue( endColor );
+    animation.start();
   }
+
 };
 
 }());
