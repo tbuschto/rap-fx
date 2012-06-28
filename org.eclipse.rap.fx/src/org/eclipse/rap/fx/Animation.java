@@ -14,6 +14,7 @@ import org.eclipse.rwt.internal.widgets.JSExecutor;
 import org.eclipse.rwt.lifecycle.WidgetUtil;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
@@ -24,14 +25,20 @@ public class Animation  {
   public static void shake( Control control ) {
     call( "org.eclipse.rap.fx.Animation.shake", new Object[]{ control } );
   }
-  
+
   public static void colorFade( Widget widget, RGB color ) {
-    if(    widget instanceof Control 
-        || widget instanceof TableItem 
-        || widget instanceof TreeItem ) 
-    {
-      call( "org.eclipse.rap.fx.Animation.colorFade", new Object[]{ widget, color } );
+    Control target = null;
+    Item item = null;
+    if( widget instanceof Control ) {
+      target = ( Control )widget;
+    } else if( widget instanceof TreeItem ) {
+      item = ( Item )widget;
+      target = ( ( TreeItem )widget ).getParent();
+    } else if( widget instanceof TableItem ) {
+      item = ( Item )widget;
+      target = ( ( TableItem )widget ).getParent();
     }
+    call( "org.eclipse.rap.fx.Animation.colorFade", new Object[]{ target, item, color } );
   }
 
   private static void call( String function, Object[] args ) {
@@ -45,6 +52,8 @@ public class Animation  {
       } else if( args[ i ] instanceof RGB ) {
         RGB rgb = ( RGB )args[ i ];
         code += "[ " + rgb.red + ", " + rgb.green + ", " + rgb.blue + " ]";
+      } else {
+        code += "null";
       }
       if( i != args.length - 1 ) {
         code += ", ";

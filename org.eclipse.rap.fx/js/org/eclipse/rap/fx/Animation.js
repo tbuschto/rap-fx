@@ -14,6 +14,9 @@ qx.Class.createNamespace( "org.eclipse.rap.fx", {} );
 (function(){
 
 var AnimationUntil = org.eclipse.rwt.AnimationUntil;
+var Widget = qx.ui.core.Widget;
+var GridItem = org.eclipse.rwt.widgets.GridItem;
+var Grid = org.eclipse.rwt.widgets.Grid;
 
 org.eclipse.rap.fx.Animation = {
 
@@ -35,12 +38,20 @@ org.eclipse.rap.fx.Animation = {
     animation.start();
   },
 
-  colorFade : function( widget, color ) {
-    if( widget instanceof qx.ui.core.Widget ) {
-      var colorStr = widget.getBackgroundColor()
-      var widgetColor = this._getBackground( widget );
-      if( color && widgetColor ) {
-        this._colorToColorFade( widget, color, widgetColor );
+  colorFade : function( target, item, color ) {
+    if( target instanceof Widget ) {
+      var widget;
+      if( item instanceof GridItem && target instanceof Grid ) {
+        widget = target.getRowContainer()._findRowByItem( item );
+      } else {
+        widget = target;
+      }
+      if( widget ) {
+        var colorStr = widget.getBackgroundColor()
+        var widgetColor = this._getBackground( widget );
+        if( color && widgetColor ) {
+          this._colorToColorFade( widget, color, widgetColor );
+        }
       }
     }
   },
@@ -52,8 +63,10 @@ org.eclipse.rap.fx.Animation = {
     renderer.setEndValue( endColor );
     var cancel = function() { animation.cancel(); };
     widget.addEventListener( "changeBackgroundColor", cancel );
+    widget.addEventListener( "changeBackgroundGradient", cancel );
     animation.addEventListener( "cancel", function() {
       widget.removeEventListener( "changeBackgroundColor", cancel );
+      widget.removeEventListener( "changeBackgroundGradient", cancel );
       widget._applyBackgroundColor( widget.getBackgroundColor() );
     } );
     animation.start();
