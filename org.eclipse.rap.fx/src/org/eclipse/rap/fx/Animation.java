@@ -14,6 +14,8 @@ import org.eclipse.rwt.internal.widgets.JSExecutor;
 import org.eclipse.rwt.lifecycle.WidgetUtil;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
 
 @SuppressWarnings("restriction")
@@ -23,8 +25,13 @@ public class Animation  {
     call( "org.eclipse.rap.fx.Animation.shake", new Object[]{ control } );
   }
   
-  public static void colorFade( Control control, RGB color ) {
-    call( "org.eclipse.rap.fx.Animation.colorFade", new Object[]{ control, color } );
+  public static void colorFade( Widget widget, RGB color ) {
+    if(    widget instanceof Control 
+        || widget instanceof TableItem 
+        || widget instanceof TreeItem ) 
+    {
+      call( "org.eclipse.rap.fx.Animation.colorFade", new Object[]{ widget, color } );
+    }
   }
 
   private static void call( String function, Object[] args ) {

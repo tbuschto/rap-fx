@@ -36,10 +36,12 @@ org.eclipse.rap.fx.Animation = {
   },
 
   colorFade : function( widget, color ) {
-    var colorStr = widget.getBackgroundColor()
-    var widgetColor = this._getBackground( widget );
-    if( color && widgetColor ) {
-      this._colorToColorFade( widget, color, widgetColor );
+    if( widget instanceof qx.ui.core.Widget ) {
+      var colorStr = widget.getBackgroundColor()
+      var widgetColor = this._getBackground( widget );
+      if( color && widgetColor ) {
+        this._colorToColorFade( widget, color, widgetColor );
+      }
     }
   },
 
